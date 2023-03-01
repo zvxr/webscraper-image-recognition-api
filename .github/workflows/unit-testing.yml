@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  static-analysis:
+  unit-testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: build environment
+        run: make up
+      - name: run tests
+        run: make test

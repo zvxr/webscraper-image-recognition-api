@@ -16,7 +16,7 @@ shell:
 	docker exec -it wira_app /bin/bash
 
 test:
-	docker exec -it wira_app 'pytest'
+	docker exec wira_app 'pytest'
 
 up:
 	docker-compose -p wira up -d
