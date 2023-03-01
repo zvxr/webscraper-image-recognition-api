@@ -1,0 +1,10 @@
+name: "Unit Testing"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
