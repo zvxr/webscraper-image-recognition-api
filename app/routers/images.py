@@ -1,12 +1,11 @@
 from fastapi import APIRouter, UploadFile
 
 from app.crawlers.images import TwitterImageCrawler
-from app.ml.images import sequential_image_ml
 from app.log import get_logger
+from app.ml.images import sequential_image_ml
 from app.schemas.images import ImageCrawlerRequest
 from app.schemas.ml import ModelPrediction, ModelSummaryResponse
 from app.services.images import ImageService
-
 
 router = APIRouter(
     prefix="/images",
@@ -23,7 +22,9 @@ async def post_images_analyzer(
 ):
     logger.debug(f"received file: {file.filename}.")
     service = ImageService()
-    file_path = await service.upload(file, (sequential_image_ml.IMG_HEIGHT, sequential_image_ml.IMG_WIDTH))
+    file_path = await service.upload(
+        file, (sequential_image_ml.IMG_HEIGHT, sequential_image_ml.IMG_WIDTH)
+    )
     return sequential_image_ml.get_prediction(file_path)
 
 
@@ -39,7 +40,7 @@ async def post_images_crawler(
     urls = crawler.fetch_urls_by_query(payload.query)
 
     service = ImageService()
-    file_paths = await service.download_urls(payload.query, urls)
+    await service.download_urls(payload.query, urls)
 
     sequential_image_ml.reset_model()
     return sequential_image_ml.get_summary()

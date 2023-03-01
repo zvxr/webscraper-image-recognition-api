@@ -6,7 +6,6 @@ from selenium import webdriver
 
 from app.log import get_logger
 
-
 logger = get_logger("__name__")
 
 
@@ -21,15 +20,15 @@ class Crawler:
             self._driver.quit()
 
     def fetch_urls_by_query(self, query: str, max_records: int = 5) -> List[str]:
-        raise NotImplemented("This must be overridden.")
+        raise NotImplementedError("This must be overridden.")
 
     @contextmanager
     def get_driver(self):
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-gpu')
-        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument("--headless")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
         self._driver = webdriver.Remote("http://selenium:4444/wd/hub", options=options)
         yield self._driver
         self._driver.quit()

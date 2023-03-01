@@ -1,5 +1,3 @@
-from typing import Dict
-
 from app.schemas.ml import ModelSummaryResponse
 
 
@@ -37,11 +35,7 @@ class BaseMl:
         raise NotImplementedError
 
     def _train_model(self, model, train_ds, val_ds):
-        model.fit(
-            train_ds,
-            validation_data=val_ds,
-            epochs=self.TRAIN_EPOCHS
-        )
+        model.fit(train_ds, validation_data=val_ds, epochs=self.TRAIN_EPOCHS)
 
     def _generate_model(self):
         """

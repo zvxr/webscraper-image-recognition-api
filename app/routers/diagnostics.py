@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 
-from app.schemas.diagnostics import DiagnosticsResponse
 from app.log import get_logger
-
+from app.schemas.diagnostics import DiagnosticsResponse
 
 router = APIRouter(
     prefix="/diagnostics",

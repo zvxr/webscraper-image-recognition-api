@@ -1,19 +1,15 @@
 import os
-from unittest import mock
 import uuid
+from unittest import mock
 
-from fastapi import UploadFile
 import jsonschema
-from PIL import Image
 import pytest
 
-from app.routers.images import TwitterImageCrawler
 from app.services.images import ImageService
-
 
 TEST_IMAGE = "test_cat.jpg"
 TEST_IMAGE_PATH = f"{os.path.dirname(os.path.realpath(__file__))}/assets/{TEST_IMAGE}"
-TEST_UUID = uuid.UUID('c0ff33c0-ffee-c0ff-eec0-ffeec0ffeec0')
+TEST_UUID = uuid.UUID("c0ff33c0-ffee-c0ff-eec0-ffeec0ffeec0")
 QUERY = "flowers"
 
 DOWNLOADED_PATH = ImageService.get_downloaded_path()
@@ -57,7 +53,13 @@ model_summary_schema = {
             "items": model_layer_schema,
         },
     },
-    "required": ["name", "total_params", "trainable_params", "non_trainable_params", "layers"],
+    "required": [
+        "name",
+        "total_params",
+        "trainable_params",
+        "non_trainable_params",
+        "layers",
+    ],
     "additionalProperties": False,
 }
 
@@ -70,7 +72,9 @@ def twitter_image_crawler():
         # TODO: may not be very stable--host images or mock.
         "https://fastly.picsum.photos/id/908/300/300.jpg?hmac=Kr9iK9ySwwpN-5dnU7po_rUxEoeoaJrp0bjX21M1sd4"
     ]
-    with mock.patch("app.routers.images.TwitterImageCrawler", return_value=crawler_mock):
+    with mock.patch(
+        "app.routers.images.TwitterImageCrawler", return_value=crawler_mock
+    ):
         yield crawler_mock
 
 

@@ -1,8 +1,6 @@
-import tensorflow as tf
-
-from keras.utils.layer_utils import count_params
 import numpy as np
-from tensorflow import keras
+import tensorflow as tf
+from keras.utils.layer_utils import count_params
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
@@ -18,9 +16,11 @@ class SequentialImageMl(BaseMl):
 
     def get_prediction(self, file_path: str) -> ModelPrediction:
         model = self.get_model()
-        img = tf.keras.utils.load_img(file_path, target_size=(self.IMG_HEIGHT, self.IMG_WIDTH))
+        img = tf.keras.utils.load_img(
+            file_path, target_size=(self.IMG_HEIGHT, self.IMG_WIDTH)
+        )
         img_array = tf.keras.utils.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0) # Create a batch
+        img_array = tf.expand_dims(img_array, 0)  # Create a batch
 
         predictions = model.predict(img_array)
         score = tf.nn.softmax(predictions[0])
@@ -44,31 +44,36 @@ class SequentialImageMl(BaseMl):
                     class_name=layer.__class__.__name__,
                     params=layer.count_params(),
                     output_shape=layer.output_shape,
-                ) for layer in model.layers
-            ]
+                )
+                for layer in model.layers
+            ],
         )
 
     def _compile_model(self, model):
         model.compile(
-            optimizer='adam',
+            optimizer="adam",
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'],
+            metrics=["accuracy"],
         )
 
     def _create_model(self, train_ds):
         class_names = train_ds.class_names
-        return Sequential([
-            layers.Rescaling(1./255, input_shape=(self.IMG_HEIGHT, self.IMG_WIDTH, 3)),
-            layers.Conv2D(16, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Conv2D(32, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Conv2D(64, 3, padding='same', activation='relu'),
-            layers.MaxPooling2D(),
-            layers.Flatten(),
-            layers.Dense(128, activation='relu'),
-            layers.Dense(len(class_names))
-        ])
+        return Sequential(
+            [
+                layers.Rescaling(
+                    1.0 / 255, input_shape=(self.IMG_HEIGHT, self.IMG_WIDTH, 3)
+                ),
+                layers.Conv2D(16, 3, padding="same", activation="relu"),
+                layers.MaxPooling2D(),
+                layers.Conv2D(32, 3, padding="same", activation="relu"),
+                layers.MaxPooling2D(),
+                layers.Conv2D(64, 3, padding="same", activation="relu"),
+                layers.MaxPooling2D(),
+                layers.Flatten(),
+                layers.Dense(128, activation="relu"),
+                layers.Dense(len(class_names)),
+            ]
+        )
 
     def _get_training_dataset(self):
         return tf.keras.utils.image_dataset_from_directory(
@@ -91,11 +96,7 @@ class SequentialImageMl(BaseMl):
         )
 
     def _train_model(self, model, train_ds, val_ds):
-        model.fit(
-            train_ds,
-            validation_data=val_ds,
-            epochs=self.TRAIN_EPOCHS
-        )
+        model.fit(train_ds, validation_data=val_ds, epochs=self.TRAIN_EPOCHS)
 
 
 # Instantiate. This is to allow model to persist between requests.

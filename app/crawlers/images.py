@@ -1,19 +1,16 @@
 from typing import List
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.support.wait import WebDriverWait
 
 from app.crawlers.base import Crawler
 from app.log import get_logger
-
 
 logger = get_logger("__name__")
 
 
 class TwitterImageCrawler(Crawler):
-
     def fetch_urls_by_query(self, query: str, max_records: int = 5) -> List[str]:
         # Perform Twitter query.
         url = f"https://twitter.com/search?q={query}&src=typed_query&f=image"
@@ -28,7 +25,7 @@ class TwitterImageCrawler(Crawler):
             # Iterate over images, adding only those that are stored in CDN.
             records = []
             for element in driver.find_elements(By.XPATH, "//img"):
-                image_url = element.get_attribute('src')
+                image_url = element.get_attribute("src")
                 logger.debug(f"record image url is {image_url}, {type(image_url)}")
                 if image_url.startswith("https://pbs.twimg.com/media"):
                     records.append(image_url)

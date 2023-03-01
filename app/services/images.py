@@ -1,20 +1,18 @@
-from io import BytesIO
 import os
-from PIL import Image
+from io import BytesIO
 from typing import List, Tuple
 from uuid import uuid4
 
 from fastapi import UploadFile
 from httpx import AsyncClient
+from PIL import Image
 
 from app.log import get_logger
-
 
 logger = get_logger("__name__")
 
 
 class ImageService:
-
     def _setup_download_path(self, query: str) -> str:
         """Makes sure that download path (based on query) exists, then returns it."""
         base_path = self.get_downloaded_path()
@@ -40,7 +38,9 @@ class ImageService:
                 success = await self.download_url(url, dest, client)
                 if success:
                     file_paths.append(dest)
-        logger.info(f"Completed downloads with [{len(file_paths)} / {len(urls)}] downloaded.")
+        logger.info(
+            f"Completed downloads with [{len(file_paths)} / {len(urls)}] downloaded."
+        )
         return file_paths
 
     async def download_url(self, url: str, dest: str, client: AsyncClient) -> bool:
@@ -68,7 +68,6 @@ class ImageService:
         to resize. Currently this will force the image to jpeg for simplicity.
         """
         base_path = self._setup_upload_path()
-        uid = uuid4()
         dest = f"{base_path}/{file.filename}"
         try:
             contents = await file.read()

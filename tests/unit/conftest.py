@@ -1,11 +1,10 @@
-from fastapi.testclient import TestClient
 import pytest
+from fastapi.testclient import TestClient
 
 from app.main import app
 
-
-#@pytest.fixture(autouse=True)
-#def set_unittest_config(monkeypatch):
+# @pytest.fixture(autouse=True)
+# def set_unittest_config(monkeypatch):
 #    """
 #    This is to prevent hitting any resources we do not want to, namely DoseSpot API.
 #    """

@@ -2,7 +2,6 @@ from typing import Any, List, Tuple
 
 from pydantic import BaseModel, confloat
 
-
 # Request
 
 

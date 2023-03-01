@@ -1,2 +1,5 @@
+black
+isort
 jsonschema
+pyflakes
 pytest
