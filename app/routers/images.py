@@ -1,9 +1,10 @@
 from fastapi import APIRouter, UploadFile
 
 from app.crawlers.images import TwitterImageCrawler
+from app.ml.images import sequential_image_ml
 from app.log import get_logger
 from app.schemas.images import ImageCrawlerRequest
-from app.schemas.ml import ModelSummaryResponse
+from app.schemas.ml import ModelPrediction, ModelSummaryResponse
 from app.services.images import ImageService
 
 
@@ -11,6 +12,19 @@ router = APIRouter(
     prefix="/images",
 )
 logger = get_logger(__name__)
+
+
+@router.post(
+    "/analyzer",
+    response_model=ModelPrediction,
+)
+async def post_images_analyzer(
+    file: UploadFile,
+):
+    logger.debug(f"received file: {file.filename}.")
+    service = ImageService()
+    file_path = await service.upload(file, (sequential_image_ml.IMG_HEIGHT, sequential_image_ml.IMG_WIDTH))
+    return sequential_image_ml.get_prediction(file_path)
 
 
 @router.post(

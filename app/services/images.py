@@ -23,6 +23,13 @@ class ImageService:
             os.makedirs(path)
         return path
 
+    def _setup_upload_path(self) -> str:
+        """Makes sure that path for uploading files exists."""
+        path = self.get_upload_path()
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
     async def download_urls(self, query: str, urls: List[str]) -> List[str]:
         base_path = self._setup_download_path(query)
         file_paths = []
@@ -50,3 +57,28 @@ class ImageService:
     @classmethod
     def get_downloaded_path(cls) -> str:
         return f"{os.path.abspath(os.getcwd())}/app/data/images/downloaded"
+
+    @classmethod
+    def get_upload_path(cls) -> str:
+        return f"{os.path.abspath(os.getcwd())}/app/data/images/uploaded"
+
+    async def upload(self, file: UploadFile, resized: Tuple[int, int] = None) -> str:
+        """
+        Uploads a file to server. Optional tuple of dimensions may be passed in
+        to resize. Currently this will force the image to jpeg for simplicity.
+        """
+        base_path = self._setup_upload_path()
+        uid = uuid4()
+        dest = f"{base_path}/{file.filename}"
+        try:
+            contents = await file.read()
+            image = Image.open(BytesIO(contents))
+        finally:
+            await file.close()
+
+        # Discard Alpha for jpeg conversion.
+        image = image.convert("RGB")
+        if resized:
+            image.thumbnail(resized, Image.ANTIALIAS)
+        image.save(dest, "JPEG")
+        return dest
