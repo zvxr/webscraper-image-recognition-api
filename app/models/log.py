@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class LogConfig(BaseModel):
-    LOGGER_NAME: str = "redflag"
+    LOGGER_NAME: str = "wira"
     LOG_FORMAT: str = "%(levelprefix)s %(asctime)s | %(message)s"
     LOG_LEVEL: str = "DEBUG"
 

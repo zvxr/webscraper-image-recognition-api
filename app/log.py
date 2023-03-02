@@ -9,4 +9,4 @@ def setup_logging():
 
 
 def get_logger(name):
-    return logging.getLogger(f"redflag.{name}")
+    return logging.getLogger(f"wira.{name}")
