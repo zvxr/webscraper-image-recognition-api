@@ -1,6 +1,10 @@
 name: "Static Analysis"
 
 on:
+  pull_request:
+    branches:
+      - dev
+      - main
   workflow_dispatch:
 
 jobs:
@@ -8,3 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: build environment
+        run: make up
+      - name: run linters
+        run: make lint

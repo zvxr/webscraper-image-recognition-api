@@ -2,3 +2,7 @@
 *.sw[nop]
 *__pycache__
 *.DS_Store
+
+# Ignore test generated files
+data/images/downloaded/flowers/c0ff33c0-ffee-c0ff-eec0-ffeec0ffeec0.jpg
+data/images/uploaded/test_cat.jpg

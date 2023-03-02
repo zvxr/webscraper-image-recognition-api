@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --reload
+    container_name: wira_app
+    volumes:
+      - ./app:/code/app
+      - ./tests:/code/tests
+      - ./data:/code/app/data
+    ports:
+      - 8000:8000
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+    - 4444:4444
