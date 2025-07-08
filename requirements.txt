@@ -1,0 +1,7 @@
+fastapi
+httpx
+matplotlib
+python-multipart
+selenium
+tensorflow
+uvicorn
